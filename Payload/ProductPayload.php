@@ -106,6 +106,19 @@ class ProductPayload
         return $variants;
     }
 
+    /**
+     * @return AttributeValuePayload[]
+     */
+    public function getAttributeValues(): array
+    {
+        $attributeValues = [];
+        foreach ($this->payload->getArrayValue('attributeValues') as $attributeValue) {
+            $attributeValues[] = new AttributeValuePayload($attributeValue);
+        }
+
+        return $attributeValues;
+    }
+
     public function getCustomData(): Payload
     {
         return new Payload($this->payload->getNullableArrayValue('customData', true) ?? []);

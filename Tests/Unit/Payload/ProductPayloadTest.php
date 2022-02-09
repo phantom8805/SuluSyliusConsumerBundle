@@ -89,6 +89,16 @@ class ProductPayloadTest extends TestCase
         $this->assertEquals(MockSyliusData::PRODUCT['variants'][0], $variants[0]->getPayload()->getData());
     }
 
+    public function testGetAttributeValues(): void
+    {
+        $entity = new ProductPayload(MockSyliusData::PRODUCT['code'], MockSyliusData::PRODUCT);
+
+        $attributeValues = $entity->getAttributeValues();
+        $this->assertCount(1, $attributeValues);
+
+        $this->assertEquals(MockSyliusData::PRODUCT['attributeValues'][0], $attributeValues[0]->getPayload()->getData());
+    }
+
     public function testGetCustomData(): void
     {
         $entity = new ProductPayload(MockSyliusData::PRODUCT['code'], MockSyliusData::PRODUCT);
