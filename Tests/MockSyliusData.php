@@ -167,6 +167,34 @@ Expedita voluptatum magnam est vitae voluptas eos. Maiores voluptatibus quos eni
                 'onHand' => 7,
             ],
         ],
+        'attributeValues' => [
+            [
+                'code' => 'material',
+                'value' => ['123-123-123'],
+                'attribute' => [
+                    'id' => 1,
+                    'code' => 'material',
+                    'type' => 'select',
+                    'translations' => [
+                        [
+                            'locale' => 'de',
+                            'name' => 'Material',
+                            'customData' => ['test' => 1],
+                        ],
+                    ],
+                    'configuration' => [
+                        'choices' => [
+                            '123-123-123' => [
+                                'de' => 'Carbon',
+                            ],
+                        ],
+                        'multiple' => false,
+                    ],
+                    'customData' => ['test' => 1],
+                ],
+                'customData' => ['test' => 1],
+            ],
+        ],
     ];
 
     const PRODUCT_MINIMUM = [
