@@ -32,7 +32,7 @@ Execute the following [composer](https://getcomposer.org/) commands to add the b
 project:
 
 ```bash
-composer require sulu/sylius-consumer-plugin
+composer require sulu/sylius-consumer-bundle
 ```
 
 Afterwards, visit the [bundle documentation](Resources/doc) to
