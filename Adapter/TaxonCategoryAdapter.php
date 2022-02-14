@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Sulu\Bundle\SyliusConsumerBundle\Adapter;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sulu\Bundle\CategoryBundle\Entity\CategoryInterface;
 use Sulu\Bundle\CategoryBundle\Entity\CategoryRepositoryInterface;
 use Sulu\Bundle\CategoryBundle\Entity\CategoryTranslationInterface;
 use Sulu\Bundle\CategoryBundle\Entity\CategoryTranslationRepositoryInterface;
+use Sulu\Bundle\SyliusConsumerBundle\Exception\ParentTaxonBridgeNotFoundException;
 use Sulu\Bundle\SyliusConsumerBundle\Payload\TaxonPayload;
 use Sulu\Bundle\SyliusConsumerBundle\Repository\TaxonCategoryBridgeRepositoryInterface;
 use Sulu\Component\Localization\Localization;
@@ -65,7 +65,7 @@ class TaxonCategoryAdapter implements TaxonAdapterInterface
         $this->entityManager->flush();
     }
 
-    private function handlePayload(TaxonPayload $payload, ?CategoryInterface $parent = null): void
+    private function handlePayload(TaxonPayload $payload): void
     {
         $bridge = $this->taxonCategoryBridgeRepository->findById($payload->getId());
         if (!$bridge) {
@@ -77,8 +77,14 @@ class TaxonCategoryAdapter implements TaxonAdapterInterface
         $category = $bridge->getCategory();
         $category->setKey($payload->getCode());
 
-        if ($parent) {
-            $category->setParent($parent);
+        if ($payload->getParent()) {
+            $parentBridge = $this->taxonCategoryBridgeRepository->findById($payload->getParent()['id']);
+
+            if (null === $parentBridge) {
+                throw new ParentTaxonBridgeNotFoundException($payload->getParent()['id']);
+            }
+
+            $category->setParent($parentBridge->getCategory());
         }
 
         $translations = $payload->getTranslations();
@@ -104,10 +110,6 @@ class TaxonCategoryAdapter implements TaxonAdapterInterface
 
             $categoryTranslation->setTranslation($translationPayload->getName());
             $categoryTranslation->setDescription($translationPayload->getDescription());
-        }
-
-        foreach ($payload->getChildren() as $child) {
-            $this->handlePayload($child, $category);
         }
     }
 
