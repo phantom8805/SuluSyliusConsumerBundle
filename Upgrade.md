@@ -1,6 +1,6 @@
 # Upgrade
 
-## 0.x
+## 0.4.0
 
 ### Rework synchronization of taxon entities
 
